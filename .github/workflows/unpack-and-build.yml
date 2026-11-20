@@ -1,10 +1,10 @@
 
-name: Build BUHAY APK from project ZIP
+name: Build BUHAY APK
 
 on:
   push:
     paths:
-      - 'buhay-android-github-ready.zip'
+      - 'BUHAY-Calling-Unblocked-GitHub.zip'
       - '.github/workflows/unpack-and-build.yml'
   workflow_dispatch:
 
@@ -14,38 +14,39 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
           accept-android-sdk-licenses: true
 
-      - name: Set up Gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Extract Android project ZIP
+      - name: Extract project ZIP
         run: |
-          test -f buhay-android-github-ready.zip
+          test -f BUHAY-Calling-Unblocked-GitHub.zip
           mkdir -p source
-          unzip -q buhay-android-github-ready.zip -d source
+          unzip -q BUHAY-Calling-Unblocked-GitHub.zip -d source
 
-      - name: Build debug APK
+      - name: Build APK
         working-directory: source
         run: gradle :app:assembleDebug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: buhay-debug-apk
